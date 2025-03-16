@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GreenGrowth - Smart Farming Solutions</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    
+    <style>
+        /* Hero Section Animation */
+        .hero-bg {
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                        url('/static/1.jpg') center/cover;
+            animation: heroReveal 0.8s ease-out;
+            height: 100vh;
+        background-attachment: fixed;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 3rem;
+        font-weight: bold;
+        }
+
+        @keyframes heroReveal {
+            0% { opacity: 0; transform: scale(1.1); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Hover Effect for Cards */
+        .card-hover {
+            transition: transform 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Scroll Animation */
+        .scroll-animation {
+            opacity: 0;
+            transform: translateY(30px) scale(0.95);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+        .scroll-animation.visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* Bounce Animation */
+        @keyframes bounceEffect {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        .bounce {
+            animation: bounceEffect 2s infinite;
+        }
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s ease-out, transform 1s ease-out;
+        }
+
+        /* Glass Morphism Hover Effect */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+        .glass-effect:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Input Field Glow Effect */
+        input:focus, select:focus {
+            border-color: green;
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+            outline: none;
+            transition: box-shadow 0.3s ease-in-out;
+        }
+
+        /* Button Shiny Swipe Hover Effect */
+        button {
+            position: relative;
+            overflow: hidden;
+        }
+        button::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: left 0.5s ease-in-out;
+        }
+        button:hover::after {
+            left: 100%;
+        }
+        .lottie-container {
+            width: 300px;
+            height: 300px;
+            position: absolute;
+            bottom: 10%;
+            right: 10%;
+        }
+        @keyframes float {
+            0% { transform: translateY(0); opacity: 0.6; }
+            50% { transform: translateY(-20px); opacity: 1; }
+            100% { transform: translateY(0); opacity: 0.6; }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+        }
+        .shake {
+            animation: shake 0.4s ease-in-out;
+        }        
+        .particle {
+            position: absolute;
+            background: rgba(34, 197, 94, 0.3);
+            border-radius: 50%;
+            animation: float 4s infinite ease-in-out alternate;
+        }
+        .particle1 { width: 50px; height: 50px; top: 10%; left: 15%; animation-duration: 6s; }
+        .particle2 { width: 30px; height: 30px; top: 50%; left: 70%; animation-duration: 5s; }
+        .particle3 { width: 40px; height: 40px; top: 80%; left: 30%; animation-duration: 7s; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    
+    <!-- Navigation -->
+    <nav class="fixed w-full text-white z-50" style="background-color: #228B22; opacity: 0.95;">
+
+
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center">
+                    <img src="/static/2.png" alt="Logo" class="h-10 w-10 rounded-full">
+                    <span class="ml-3 text-2xl font-bold">GreenGrowth</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#home" class="hover:text-green-200">Home</a>
+                    <a href="#features" class="hover:text-green-200">Features</a>
+                    <a href="#recommendations" class="hover:text-green-200">Get Started</a>
+                    <a href="#contact" class="hover:text-green-200">Contact</a>
+                </div>
+           
+                <button class="md:hidden">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16m-16 6h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-bg flex items-center justify-center text-white">
+        <div class="text-center">
+            <h1 class="text-5xl md:text-6xl font-bold text-white bounce">Smart Farming Solutions</h1>
+            <p class="text-xl md:text-2xl mb-8">Empowering farmers with AI-driven recommendations</p>
+            <a href="#recommendations" 
+               class="bg-green-600 hover:bg-green-700 text-white px-8 py-4 rounded-lg text-xl inline-block transition-colors">
+                Get Started
+            </a>
+        </div>
+    </div>
+    <div id="lottie-animation" class="lottie-container"></div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.9.6/lottie.min.js"></script>
+    <script>
+        var animation = bodymovin.loadAnimation({
+            container: document.getElementById('lottie-animation'),
+            renderer: 'svg',
+            loop: true,
+            autoplay: true,
+            path: '/static/ab.json' 
+        });
+    </script>
+    </section>
+     
+    <!-- Features Section -->
+    <section id="features" class="scroll-animation py-20 bg-white">
+        <div class="container mx-auto px-6">
+            <h2 class="text-4xl font-bold text-center text-green-800 mb-16">Our Features</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <!-- Feature 1 -->
+                <div class="scroll-animation bg-white p-8 rounded-lg shadow-lg card-hover">
+                    <div class="flex justify-center mb-6">
+                        <img src="/static/ai.jpg" alt="AI" class="rounded-lg">
+                    </div>
+                    <h3 class="text-2xl font-bold text-green-700 mb-4">AI-Powered Insights</h3>
+                    <p class="text-gray-600">Get personalized crop recommendations based on your soil type and local conditions.</p>
+                </div>
+
+
+<script>
+    document.addEventListener("scroll", function () {
+        const elements = document.querySelectorAll(".scroll-reveal");
+        elements.forEach((el) => {
+            if (el.getBoundingClientRect().top < window.innerHeight - 50) {
+                el.style.opacity = 1;
+                el.style.transform = "translateY(0)";
+            }
+        });
+    });
+</script>
+
+
+                <!-- Feature 2 -->
+                <div class="scroll-animation bg-white p-8 rounded-lg shadow-lg card-hover">
+                    <div class="flex justify-center mb-6">
+                        <img src="/static/w.jpg" alt="Weather" class="rounded-lg">
+                    </div>
+                    <h3 class="text-2xl font-bold text-green-700 mb-4">Market Demand Prediction</h3>
+                    <p class="text-gray-600">Predict which crops will be in high demand in the market.</p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="scroll-animation bg-white p-8 rounded-lg shadow-lg card-hover">
+                    <div class="flex justify-center mb-6">
+                        <img src="/static/f.jpg" alt="Market" class="rounded-lg">
+                    </div>
+                    <h3 class="text-2xl font-bold text-green-700 mb-4">Crop Rotation Suggestion</h3>
+                    <p class="text-gray-600">Recommends the best crop rotation strategies for soil health.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- JavaScript for Scroll Animation -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const elements = document.querySelectorAll(".scroll-animation");
+        
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        setTimeout(() => {
+                            entry.target.classList.add("visible");
+                        }, index * 200); // Adds delay for staggered effect
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.2 });
+        
+            elements.forEach(element => observer.observe(element));
+        });        
+    </script>
+    <div class="particle particle1"></div>
+<div class="particle particle2"></div>
+<div class="particle particle3"></div>
+
+
+
+    <!-- Recommendations Section -->
+    <section id="recommendations" class="py-20 fade-in">
+        <div class="container mx-auto px-6">
+            <div class="max-w-4xl mx-auto glass-effect p-8 rounded-lg shadow-lg">
+            
+                <!-- Dropdown Box Instead of Static Heading -->
+                <div class="text-center mb-8">
+                <h2 class="text-3xl font-bold text-green-800 mb-8 text-center">Get Your Crop Recommendations</h2>
+                
+                <form id="recommendationForm" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-gray-700 mb-2" for="soil_type">Soil Type</label>
+                            <select id="soil_type" name="soil_type" 
+                                    class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-green-500">
+                                    <option value="" disabled selected>Select Soil Type</option>
+                                <option value="clay">Clay Soil</option>
+                                <option value="loamy">Loamy Soil</option>
+                                <option value="sandy">Sandy Soil</option>
+                                <option value="black">Black Soil</option>
+                            </select>
+                            
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 mb-2" for="area">Land Area (Hectares)</label>
+                            <input type="number" id="area" name="area" 
+                                   class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-green-500">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 mb-2" for="rainfall">Average Rainfall (mm)</label>
+                            <input type="number" id="rainfall" name="rainfall" 
+                                   class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-green-500">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-gray-700 mb-2" for="ph">Soil pH</label>
+                            <input type="number" id="ph" name="ph" step="0.1" 
+                                   class="w-full p-3 border rounded-lg focus:ring-2 focus:ring-green-500">
+                        </div>
+                    </div>
+
+                    <button type="submit" 
+                            class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-lg text-lg font-medium transition-colors">
+                        Get Recommendations
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- JavaScript for Scroll Animation -->
+    <script>
+        document.addEventListener("scroll", function () {
+            const section = document.querySelector("#recommendations");
+            if (section.getBoundingClientRect().top < window.innerHeight - 50) {
+                section.classList.add("fade-in");
+                section.style.opacity = 1;
+                section.style.transform = "translateY(0)";
+            }
+        });
+            document.getElementById("recommendationForm").addEventListener("submit", function(event) {
+            let inputs = document.querySelectorAll("input, select");
+            let valid = true;
+            
+            inputs.forEach(input => {
+                if (!input.value) {
+                    input.classList.add("shake");
+                    setTimeout(() => input.classList.remove("shake"), 500);
+                    valid = false;
+                }
+            });
+        
+            if (!valid) {
+                event.preventDefault();
+                alert("Please fill all fields! 🚨");
+            }
+        });
+    </script>
+    <!-- Success Stories -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-6 text-center">
+            
+                <!-- Lottie Animation Container -->
+                <div id="lottie-success" class=" mb-2 w-5 h-5"></div>
+                </div>
+                <h2 class="text-5xl font-bold text-green-800 mb-4 text-center">Success Stories</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div class="bg-white p-8 rounded-lg shadow-lg card-hover">
+                    <div class="flex items-center mb-6">
+                        <img src="/api/placeholder/64/64" alt="Farmer" class="rounded-full">
+                        <div class="ml-4">
+                            <h3 class="text-xl font-bold">Rajesh Kumar</h3>
+                            <p class="text-gray-600">Maharashtra Farmer</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700">"Using GreenGrowth, I increased my crop yield by 40% and reduced water usage by 25%. The recommendations were perfect for my land."</p>
+                </div>
+
+                <div class="bg-white p-8 rounded-lg shadow-lg card-hover">
+                    <div class="flex items-center mb-6">
+                        <img src="/api/placeholder/64/64" alt="Farmer" class="rounded-full">
+                        <div class="ml-4">
+                            <h3 class="text-xl font-bold">Lakshmi Devi</h3>
+                            <p class="text-gray-600">Karnataka Farmer</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700">"Thank you for introducing crop rotation! My soil is healthier, and my yields have improved. Truly a game-changer for my farm!"</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- JavaScript for Lottie Animation -->
+    <script>
+        var successAnimation = bodymovin.loadAnimation({
+        container: document.getElementById('lottie-success'),
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: '/static/123.json',
+        rendererSettings: {
+            preserveAspectRatio: 'xMidYMid meet' // Ensures the animation fits within the container
+        }
+    });
+    
+    // Set the size directly on the container
+    document.getElementById('lottie-success').style.width = '200px';  // Adjust width as needed
+    document.getElementById('lottie-success').style.height = '200px'; // Adjust height as needed
+    </script>
+
+    <!-- Footer -->
+
+    <footer class="bg-green-800 text-white py-12">
+        <div class="container mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+                <div>
+                    <h3 class="text-xl font-bold mb-4">About GreenGrowth
+                    </h3>
+                    <p class="text-green-200">At GreenGrowth, we are dedicated to transforming agriculture through data-driven insights. Our AI-powered platform helps farmers make informed decisions about crop selection for better yields.</p>
+                </div>
+                <div>
+                    
+                </div>
+                <div>
+                    
+                        <div id="contact">
+                            <h3 class="text-xl font-bold mb-4">Contact Us</h3>
+                            <ul class="space-y-2 text-green-200">
+                        <li>Email: support@GreenGrowth.com</li>
+                        <li>Phone: 1800-FARM-HELP</li>
+                        <li>Address: Tech Park, Greater Noida</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Follow Us</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-green-200 hover:text-white">
+                            <img src="/api/placeholder/24/24" alt="Facebook" class="h-6 w-6">
+                        </a>
+                        <a href="#" class="text-green-200 hover:text-white">
+                            <img src="/api/placeholder/24/24" alt="Twitter" class="h-6 w-6">
+                        </a>
+                        <a href="#" class="text-green-200 hover:text-white">
+                            <img src="/api/placeholder/24/24" alt="Instagram" class="h-6 w-6">
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-green-700 text-center text-green-200">
+                <p>&copy; 2024 GreenGrowth. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Form submission handling
+        document.getElementById('recommendationForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = {
+                soil_type: document.getElementById('soil_type').value,
+                area: document.getElementById('area').value,
+                rainfall: document.getElementById('rainfall').value,
+                ph: document.getElementById('ph').value
+            };
+            
+            try {
+                const response = await fetch('/api/recommend', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const data = await response.json();
+                // Handle the response data
+                alert('Recommendations received! Check your dashboard for details.');
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error getting recommendations. Please try again.');
+            }
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html> 
