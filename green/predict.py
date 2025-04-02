@@ -12,7 +12,7 @@ with open("model/rf_model.pkl", "rb") as f:
 with open("model/label_encoder.pkl", "rb") as f:
     label_encoder = pickle.load(f)
 
-test_input = np.array([[90, 42, 43, 20.879744, 82.002744, 6.502985, 202.935536]])  
+test_input = np.array([[60,46,22,24.89364635,65.61418761,6.625404347999999,87.9298085]])  
 
 num_features = scaler.n_features_in_
 if test_input.shape[1] != num_features:
