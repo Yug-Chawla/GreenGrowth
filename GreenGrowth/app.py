@@ -17,87 +17,134 @@ crop_details = {
     "cotton": {
         "type": "Staple Crop",
         "advantages": "Highly profitable in dry areas; supports textile industries.",
-        "fertilizers": "Nitrogen, Phosphorus, Potassium"
+        "fertilizers": "Nitrogen, Phosphorus, Potassium",
+        "hindi_name": "कपास"
     },
     "rice": {
         "type": "Cereal Crop",
         "advantages": "Primary food grain in Asia; high yield.",
-        "fertilizers": "Urea, DAP, MOP"
+        "fertilizers": "Urea, DAP, MOP",
+        "hindi_name": "चावल"
     },
     "maize": {
         "type": "Cereal Crop",
         "advantages": "Used for food, fodder, and industrial products.",
-        "fertilizers": "Nitrogen-rich fertilizers"
+        "fertilizers": "Nitrogen-rich fertilizers",
+        "hindi_name": "मक्का"
     },
     "coffee": {
         "type": "Commercial Crop",
         "advantages": "High demand globally; profitable in hilly regions.",
-        "fertilizers": "NPK, compost, bone meal"
+        "fertilizers": "NPK, compost, bone meal",
+        "hindi_name": "कॉफी"
     },
     "chickpea": {
         "type": "Pulse Crop",
         "advantages": "Improves soil fertility; protein-rich food.",
-        "fertilizers": "Super phosphate, potash"
+        "fertilizers": "Super phosphate, potash",
+        "hindi_name": "चना"
     },
     "pigeonpea": {
         "type": "Pulse Crop",
         "advantages": "Drought-resistant and restores soil nitrogen.",
-        "fertilizers": "DAP, SSP"
+        "fertilizers": "DAP, SSP",
+        "hindi_name": "अरहर"
     },
     "mango": {
         "type": "Fruit Crop",
         "advantages": "High economic value; widely loved tropical fruit.",
-        "fertilizers": "Farmyard manure, NPK"
+        "fertilizers": "Farmyard manure, NPK",
+        "hindi_name": "आम"
     },
     "orange": {
         "type": "Fruit Crop",
         "advantages": "Rich in vitamin C; good commercial value.",
-        "fertilizers": "Potassium sulfate, manure"
+        "fertilizers": "Potassium sulfate, manure",
+        "hindi_name": "संतरा"
     },
     "papaya": {
         "type": "Fruit Crop",
         "advantages": "Fast-growing and rich in nutrients.",
-        "fertilizers": "Urea, cow dung, compost"
+        "fertilizers": "Urea, cow dung, compost",
+        "hindi_name": "पपीता"
     },
     "watermelon": {
         "type": "Fruit Crop",
         "advantages": "High water content; good for summer markets.",
-        "fertilizers": "Nitrogen, potash, phosphorus"
+        "fertilizers": "Nitrogen, potash, phosphorus",
+        "hindi_name": "तरबूज"
     },
     "lentil": {
         "type": "Pulse Crop",
         "advantages": "Nitrogen-fixing and protein-rich.",
-        "fertilizers": "DAP, urea"
+        "fertilizers": "DAP, urea",
+        "hindi_name": "मसूर"
     },
     "pomegranate": {
         "type": "Fruit Crop",
         "advantages": "Resilient crop; high juice content and market value.",
-        "fertilizers": "Organic manure, NPK"
+        "fertilizers": "Organic manure, NPK",
+        "hindi_name": "अनार"
     },
     "banana": {
         "type": "Fruit Crop",
         "advantages": "High yielding and supports export industry.",
-        "fertilizers": "Nitrogen, phosphorus, potassium"
+        "fertilizers": "Nitrogen, phosphorus, potassium",
+        "hindi_name": "केला"
     },
     "grapes": {
         "type": "Fruit Crop",
         "advantages": "Used in wine and juice industries; high profit.",
-        "fertilizers": "Potash, zinc sulfate"
+        "fertilizers": "Potash, zinc sulfate",
+        "hindi_name": "अंगूर"
     },
     "apple": {
         "type": "Fruit Crop",
         "advantages": "Stored for long; valuable in cold climates.",
-        "fertilizers": "Urea, FYM, potassium sulfate"
+        "fertilizers": "Urea, FYM, potassium sulfate",
+        "hindi_name": "सेब"
     },
     "jute": {
         "type": "Fiber Crop",
         "advantages": "Eco-friendly fiber source; used in bags & mats.",
-        "fertilizers": "Nitrogen, phosphorus"
+        "fertilizers": "Nitrogen, phosphorus",
+        "hindi_name": "पटसन"
     },
     "mungbean": {
         "type": "Pulse Crop",
         "advantages": "Short duration; enriches soil nitrogen.",
-        "fertilizers": "Phosphate fertilizers, compost"
+        "fertilizers": "Phosphate fertilizers, compost",
+        "hindi_name": "मूंग"
+    },
+    "mothbeans": {
+        "type": "Pulse Crop",
+        "advantages": "Drought resistant; nitrogen-fixing; suitable for arid regions.",
+        "fertilizers": "Phosphorus, Potassium",
+        "hindi_name": "मोठ"
+    },
+    "kidneybeans": {
+        "type": "Pulse Crop",
+        "advantages": "High protein content; good nitrogen-fixer; adaptable to various climates.",
+        "fertilizers": "Phosphorus, Potassium, limited Nitrogen",
+        "hindi_name": "राजमा"
+    },
+    "blackgram": {
+        "type": "Pulse Crop",
+        "advantages": "Short duration crop; nitrogen-fixing; suitable for crop rotation.",
+        "fertilizers": "Phosphorus, Potassium, Sulfur",
+        "hindi_name": "उड़द"
+    },
+    "muskmelon": {
+        "type": "Fruit Crop",
+        "advantages": "High market value; short growing season; water-efficient.",
+        "fertilizers": "Nitrogen, Phosphorus, Potassium, Calcium",
+        "hindi_name": "खरबूजा"
+    },
+    "coconut": {
+        "type": "Plantation Crop",
+        "advantages": "Multiple uses (food, oil, fiber); long productive life; coastal ecosystem support.",
+        "fertilizers": "Potassium, Phosphorus, Magnesium, Chlorine",
+        "hindi_name": "नारियल"
     }
 }
 
@@ -159,10 +206,8 @@ class Location(db.Model):
     def __repr__(self):
         return f'<Location {self.city}>'
 
-# Ensure model directory exists
 os.makedirs("model", exist_ok=True)
 
-# Load models safely
 try:
     with open("model/scaler.pkl", "rb") as f:
         scaler = pickle.load(f)
@@ -187,13 +232,9 @@ except Exception as e:
 
     logging.warning("⚠️ Using fallback models (not accurate predictions).")
 
-# Initialize database and load data
-# Replace the @app.before_first_request decorator and function with this:
 def init_db():
     with app.app_context():
         db.create_all()
-        
-        # Import crop dataset if it doesn't exist already
         if CropData.query.count() == 0:
             try:
                 with open('pro/dataset/data.csv', 'r') as f:
@@ -216,7 +257,7 @@ def init_db():
                 logging.error(f"Error importing CSV data: {e}")
                 db.session.rollback()
 
-# Sign-Up Route (Initial Page)
+# Sign-Up Route
 @app.route('/')
 def sign_up():
     return render_template('sign.html')
@@ -229,8 +270,6 @@ def home():
     prediction = ""
     alternatives = ""
     error = ""
-    
-    # Check if we need to load a previous recommendation
     rec_id = request.args.get('load')
     if rec_id and 'user_id' in session:
         try:
@@ -252,8 +291,6 @@ def home():
         except Exception as e:
             logging.error(f"Error loading recommendation: {e}")
             error = "Failed to load the recommendation"
-    
-    # Get list of available cities for the location selector
     cities = [location.city for location in Location.query.all()]
     
     return render_template('index.html', 
@@ -329,8 +366,6 @@ def sign_up_submit():
         new_user = User(username=username, email=email, password=password)
         db.session.add(new_user)
         db.session.commit()
-        
-        # Store user ID in session
         session['user_id'] = new_user.id
         flash("Welcome to GreenGrowth.")
         return redirect(url_for('home'))
@@ -362,7 +397,7 @@ def login():
         
         user = User.query.filter_by(email=email).first()
         
-        if user and user.password == password:  # In a real app, use password hashing!
+        if user and user.password == password: 
             session['user_id'] = user.id
             flash("Do small things with love")
             return redirect(url_for('home'))
@@ -380,7 +415,7 @@ app.secret_key = 'any_random_string'
 def logout():
     session.pop('user_id', None)
     flash("You have been logged out.")
-    return redirect(url_for('home'))  # or wherever you want to send them
+    return redirect(url_for('home'))  
     
 # API endpoint to fetch weather data by city
 @app.route('/api/location/<city>', methods=['GET'])
@@ -451,9 +486,8 @@ def predict():
             alternatives_str = "Not available"
             
         if request.method == 'POST':
-            form_data = request.form  # ✅ Step 1
-            city = form_data.get('city', '').strip()  # ✅ Step 2 — Extract optional city
-        # Save recommendation to database if user is logged in
+            form_data = request.form  
+            city = form_data.get('city', '').strip() 
         if 'user_id' in session:
             try:
                 recommendation = Recommendation(
@@ -478,12 +512,12 @@ def predict():
                 logging.error(f"Error saving recommendation: {e}")
 
         return render_template('index.html',
-                               prediction=predicted_label,  # Changed to just return the crop name
-                               city=city if 'city' in locals() else "",  # Pass city for display
+                               prediction=predicted_label,  
+                               city=city if 'city' in locals() else "", 
                                alternatives=alternatives_str,
                                show_result=True,
                                form_data=form_data,
-                               crop_details=crop_details,  # Pass crop_details to template
+                               crop_details=crop_details,  
                                cities=[location.city for location in Location.query.all()])
 
     except Exception as e:
@@ -492,12 +526,12 @@ def predict():
                               error=f"⚠️ Error processing request: {str(e)}", 
                               show_result=True, 
                               form_data=request.form,
-                              crop_details=crop_details,  # Pass crop_details even in error case
+                              crop_details=crop_details,  
                               cities=[location.city for location in Location.query.all()])
         
 
 if __name__ == '__main__':
     with app.app_context():
-        db.create_all()  # Create database tables before running the app
+        db.create_all()  
     app.run(debug=True)
     
