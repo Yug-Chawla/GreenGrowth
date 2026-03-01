@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crop Recommendation Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            padding: 30px;
+        }
+
+        .form-section {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+
+        .location-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .results-section {
+            background: #fff;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 25px;
+            margin-top: 20px;
+        }
+
+        .results-section h3 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .crop-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 5px solid #4CAF50;
+        }
+
+        .crop-card h4 {
+            color: #333;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            text-transform: capitalize;
+        }
+
+        .crop-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .detail-item {
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .detail-item strong {
+            display: block;
+            color: #4CAF50;
+            font-size: 1.1rem;
+        }
+
+        .confidence-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .confidence-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #45a049);
+            transition: width 0.5s ease;
+        }
+
+        .auto-fill-info {
+            background: #e3f2fd;
+            border: 1px solid #2196f3;
+            border-radius: 5px;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #1976d2;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .error {
+            background: #ffebee;
+            border: 1px solid #f44336;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        .success {
+            background: #e8f5e8;
+            border: 1px solid #4CAF50;
+            color: #2e7d32;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .location-inputs {
+                grid-template-columns: 1fr;
+            }
+            
+            .crop-details {
+                grid-template-columns: 1fr;
+            }
+
+            .form-section h4 {
+                font-size: 1.2rem;
+            }
+
+            .btn {
+                width: 100%;
+                margin: 5px 0 !important;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .main-content {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌾 Crop Recommendation System</h1>
+            <p>Get AI-powered crop recommendations based on your location</p>
+            <div id="authStatus" style="margin-top: 15px; font-size: 14px;"></div>
+        </div>
+
+        <div class="main-content">
+            <!-- Authentication Section -->
+            <div id="authSection" class="form-section" style="display: none;">
+                <h3>Please Login First</h3>
+                <div style="text-align: center;">
+                    <p>You need to be logged in to use crop recommendations.</p>
+                    <button class="btn" onclick="quickLogin()">Quick Demo Login</button>
+                    <p style="margin-top: 10px; font-size: 14px; color: #666;">
+                        Or create account at: <a href="/register" target="_blank">/register</a>
+                    </p>
+                </div>
+            </div>
+            <div class="form-section">
+                <h3>Input Data (All fields optional - will auto-fill from location if provided)</h3>
+                <form id="cropForm">
+                    <!-- Location Section -->
+                    <div style="margin-bottom: 25px;">
+                        <h4 style="color: #4CAF50; margin-bottom: 15px;">Location (Optional)</h4>
+                        <div class="location-inputs">
+                            <div class="form-group">
+                                <label for="latitude">Latitude</label>
+                                <input type="number" id="latitude" step="any" placeholder="e.g., 28.6139">
+                            </div>
+                            <div class="form-group">
+                                <label for="longitude">Longitude</label>
+                                <input type="number" id="longitude" step="any" placeholder="e.g., 77.2090">
+                            </div>
+                        </div>
+                        <div style="text-align: center; margin-top: 15px;">
+                            <button type="button" class="btn" onclick="getCurrentLocation()">Use My Location</button>
+                            <button type="button" class="btn" onclick="clearLocation()" style="margin-left: 10px; background: #ff9800;">Clear Location</button>
+                        </div>
+                    </div>
+
+                    <!-- Soil Parameters Section -->
+                    <div style="margin-bottom: 25px;">
+                        <h4 style="color: #4CAF50; margin-bottom: 15px;">Soil Parameters (Optional)</h4>
+                        <div class="location-inputs" style="grid-template-columns: repeat(4, 1fr);">
+                            <div class="form-group">
+                                <label for="ph">pH (0-14)</label>
+                                <input type="number" id="ph" step="0.1" min="0" max="14" placeholder="e.g., 6.5">
+                            </div>
+                            <div class="form-group">
+                                <label for="nitrogen">Nitrogen (ppm)</label>
+                                <input type="number" id="nitrogen" step="1" min="0" placeholder="e.g., 50">
+                            </div>
+                            <div class="form-group">
+                                <label for="phosphorus">Phosphorus (ppm)</label>
+                                <input type="number" id="phosphorus" step="1" min="0" placeholder="e.g., 30">
+                            </div>
+                            <div class="form-group">
+                                <label for="potassium">Potassium (ppm)</label>
+                                <input type="number" id="potassium" step="1" min="0" placeholder="e.g., 40">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Weather Parameters Section -->
+                    <div style="margin-bottom: 25px;">
+                        <h4 style="color: #4CAF50; margin-bottom: 15px;">Weather Parameters (Optional)</h4>
+                        <div class="location-inputs" style="grid-template-columns: repeat(3, 1fr);">
+                            <div class="form-group">
+                                <label for="temperature">Temperature (°C)</label>
+                                <input type="number" id="temperature" step="0.1" placeholder="e.g., 25">
+                            </div>
+                            <div class="form-group">
+                                <label for="humidity">Humidity (%)</label>
+                                <input type="number" id="humidity" step="1" min="0" max="100" placeholder="e.g., 70">
+                            </div>
+                            <div class="form-group">
+                                <label for="rainfall">Rainfall (mm/year)</label>
+                                <input type="number" id="rainfall" step="1" min="0" placeholder="e.g., 800">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="text-align: center; margin-top: 20px;">
+                        <button type="submit" class="btn" style="font-size: 18px; padding: 15px 40px;">Get Crop Recommendations</button>
+                        <button type="button" class="btn" onclick="clearAllInputs()" style="margin-left: 15px; background: #f44336;">Clear All</button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="results" class="results-section" style="display: none;">
+                <h3>🎯 Crop Recommendations</h3>
+                <div id="recommendationsList"></div>
+            </div>
+
+            <div id="autoFillInfo" class="auto-fill-info" style="display: none;"></div>
+            <div id="loading" class="loading" style="display: none;">
+                <p>🔄 Getting recommendations...</p>
+            </div>
+            <div id="error" class="error" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+        let isAuthenticated = false;
+
+        // Check authentication status on page load
+        window.addEventListener('load', async function() {
+            await checkAuthStatus();
+        });
+
+        // Check if user is authenticated
+        async function checkAuthStatus() {
+            try {
+                const response = await fetch('/api/auth-status');
+                const data = await response.json();
+                
+                if (data.authenticated) {
+                    isAuthenticated = true;
+                    document.getElementById('authStatus').innerHTML = `
+                        <span style="color: #4CAF50;">✅ Logged in as: ${data.username}</span>
+                        <button onclick="logout()" style="margin-left: 15px; padding: 5px 10px; background: #f44336; color: white; border: none; border-radius: 3px; cursor: pointer;">Logout</button>
+                    `;
+                    document.getElementById('authSection').style.display = 'none';
+                } else {
+                    isAuthenticated = false;
+                    document.getElementById('authStatus').innerHTML = '<span style="color: #f44336;">❌ Not logged in</span>';
+                    document.getElementById('authSection').style.display = 'block';
+                }
+            } catch (error) {
+                console.error('Auth check failed:', error);
+                document.getElementById('authStatus').innerHTML = '<span style="color: #ff9800;">⚠️ Auth status unknown</span>';
+            }
+        }
+
+        // Quick demo login
+        async function quickLogin() {
+            try {
+                showMessage('Attempting demo login...', 'success');
+                
+                // Try to login with demo credentials
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email: 'demo@test.com',
+                        password: 'demo123'
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    showMessage('Demo login successful!', 'success');
+                    await checkAuthStatus();
+                } else {
+                    // If demo user doesn't exist, create it
+                    await createDemoUser();
+                }
+            } catch (error) {
+                showMessage('Login failed. Please try manual registration.', 'error');
+            }
+        }
+
+        // Create demo user
+        async function createDemoUser() {
+            try {
+                showMessage('Creating demo account...', 'success');
+                
+                const response = await fetch('/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        username: 'demo_user',
+                        email: 'demo@test.com',
+                        password: 'demo123',
+                        farm_size: '5'
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    showMessage('Demo account created and logged in!', 'success');
+                    await checkAuthStatus();
+                } else {
+                    showMessage('Demo account creation failed: ' + data.message, 'error');
+                }
+            } catch (error) {
+                showMessage('Failed to create demo account', 'error');
+            }
+        }
+
+        // Logout
+        async function logout() {
+            try {
+                await fetch('/logout');
+                showMessage('Logged out successfully', 'success');
+                await checkAuthStatus();
+            } catch (error) {
+                showMessage('Logout failed', 'error');
+            }
+        }
+        // Get current location
+        function getCurrentLocation() {
+            if (navigator.geolocation) {
+                showMessage('Detecting location...', 'success');
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    document.getElementById('latitude').value = position.coords.latitude.toFixed(6);
+                    document.getElementById('longitude').value = position.coords.longitude.toFixed(6);
+                    showMessage('Location detected successfully!', 'success');
+                    
+                    // Test the location by fetching location info
+                    testLocation(position.coords.latitude, position.coords.longitude);
+                }, function(error) {
+                    let errorMsg = 'Location error: ';
+                    switch(error.code) {
+                        case error.PERMISSION_DENIED:
+                            errorMsg += "Location access denied by user.";
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            errorMsg += "Location information is unavailable.";
+                            break;
+                        case error.TIMEOUT:
+                            errorMsg += "Location request timed out.";
+                            break;
+                        default:
+                            errorMsg += "An unknown error occurred.";
+                            break;
+                    }
+                    showMessage(errorMsg, 'error');
+                });
+            } else {
+                showMessage('Geolocation is not supported by this browser', 'error');
+            }
+        }
+
+        // Test location by fetching location info
+        async function testLocation(lat, lon) {
+            try {
+                const response = await fetch(`/api/location/${lat}/${lon}`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    showMessage(`Location verified: ${data.location.city}, ${data.location.state}`, 'success');
+                } else {
+                    showMessage('Location detected but could not verify address', 'success');
+                }
+            } catch (error) {
+                console.log('Location test failed:', error);
+                // Don't show error as location coordinates are still valid
+            }
+        }
+
+        // Clear location inputs
+        function clearLocation() {
+            document.getElementById('latitude').value = '';
+            document.getElementById('longitude').value = '';
+            showMessage('Location cleared', 'success');
+        }
+
+        // Clear all inputs
+        function clearAllInputs() {
+            const inputs = document.querySelectorAll('input[type="number"]');
+            inputs.forEach(input => input.value = '');
+            showMessage('All inputs cleared', 'success');
+        }
+
+        // Handle form submission
+        document.getElementById('cropForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Check authentication first
+            if (!isAuthenticated) {
+                showMessage('Please login first to get crop recommendations', 'error');
+                document.getElementById('authSection').scrollIntoView({ behavior: 'smooth' });
+                return;
+            }
+            
+            // Get all form values
+            const formData = getFormData();
+            
+            // Check if at least location is provided for auto-fill
+            if (!formData.latitude && !formData.longitude && !hasManualInputs(formData)) {
+                showMessage('Please provide at least location coordinates OR manual soil/weather data', 'error');
+                return;
+            }
+
+            await getCropRecommendations(formData);
+        });
+
+        // Get form data
+        function getFormData() {
+            const latitude = document.getElementById('latitude').value;
+            const longitude = document.getElementById('longitude').value;
+            const ph = document.getElementById('ph').value;
+            const nitrogen = document.getElementById('nitrogen').value;
+            const phosphorus = document.getElementById('phosphorus').value;
+            const potassium = document.getElementById('potassium').value;
+            const temperature = document.getElementById('temperature').value;
+            const humidity = document.getElementById('humidity').value;
+            const rainfall = document.getElementById('rainfall').value;
+
+            const data = {};
+            
+            // Add location if provided
+            if (latitude && longitude) {
+                data.latitude = parseFloat(latitude);
+                data.longitude = parseFloat(longitude);
+            }
+
+            // Add soil data if any provided
+            if (ph || nitrogen || phosphorus || potassium) {
+                data.soil = {};
+                if (ph) data.soil.ph = parseFloat(ph);
+                if (nitrogen) data.soil.nitrogen = parseFloat(nitrogen);
+                if (phosphorus) data.soil.phosphorus = parseFloat(phosphorus);
+                if (potassium) data.soil.potassium = parseFloat(potassium);
+            }
+
+            // Add weather data if any provided
+            if (temperature || humidity || rainfall) {
+                data.weather = {};
+                if (temperature) data.weather.temperature = parseFloat(temperature);
+                if (humidity) data.weather.humidity = parseFloat(humidity);
+                if (rainfall) data.weather.rainfall = parseFloat(rainfall);
+            }
+
+            return data;
+        }
+
+        // Check if manual inputs are provided
+        function hasManualInputs(data) {
+            return data.soil || data.weather;
+        }
+
+        // Get crop recommendations
+        async function getCropRecommendations(formData) {
+            showLoading(true);
+            hideError();
+            
+            try {
+                console.log('Sending data:', formData);
+                
+                const response = await fetch('/api/recommend-crop', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+                console.log('Received data:', data);
+                
+                if (data.success) {
+                    displayRecommendations(data);
+                    showAutoFillInfo(data.auto_filled, data.location);
+                } else {
+                    showMessage(data.error || 'Failed to get recommendations', 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage('Network error. Please check if the server is running on port 5000.', 'error');
+            } finally {
+                showLoading(false);
+            }
+        }
+
+        // Display recommendations
+        function displayRecommendations(data) {
+            const resultsDiv = document.getElementById('results');
+            const listDiv = document.getElementById('recommendationsList');
+            
+            listDiv.innerHTML = '';
+            
+            // Location info (if available)
+            if (data.location) {
+                const locationInfo = document.createElement('div');
+                locationInfo.className = 'auto-fill-info';
+                locationInfo.innerHTML = `
+                    <strong>Location:</strong> ${data.location.city || 'Unknown'}, ${data.location.state || 'Unknown'} 
+                    ${data.location.lat ? `(${data.location.lat.toFixed(4)}, ${data.location.lon.toFixed(4)})` : ''}
+                `;
+                listDiv.appendChild(locationInfo);
+            }
+
+            // Weather info (if available)
+            if (data.weather) {
+                const weatherInfo = document.createElement('div');
+                weatherInfo.className = 'auto-fill-info';
+                weatherInfo.style.marginTop = '10px';
+                weatherInfo.innerHTML = `
+                    <strong>Weather:</strong> ${data.weather.temperature}°C, 
+                    ${data.weather.humidity}% humidity, ${data.weather.rainfall}mm rainfall
+                `;
+                listDiv.appendChild(weatherInfo);
+            }
+
+            // Soil info (if available)
+            if (data.soil) {
+                const soilInfo = document.createElement('div');
+                soilInfo.className = 'auto-fill-info';
+                soilInfo.style.marginTop = '10px';
+                soilInfo.innerHTML = `
+                    <strong>Soil:</strong> pH ${data.soil.ph || 'N/A'}, 
+                    N:${data.soil.nitrogen || 'N/A'} P:${data.soil.phosphorus || 'N/A'} K:${data.soil.potassium || 'N/A'}
+                `;
+                listDiv.appendChild(soilInfo);
+            }
+            
+            // Recommendations
+            if (data.recommendations && data.recommendations.length > 0) {
+                data.recommendations.forEach((crop, index) => {
+                    const cropCard = document.createElement('div');
+                    cropCard.className = 'crop-card';
+                    cropCard.style.marginTop = '20px';
+                    
+                    cropCard.innerHTML = `
+                        <h4>${index === 0 ? '🏆' : index === 1 ? '🥈' : '🥉'} ${crop.crop}</h4>
+                        <div>
+                            <strong>Confidence: ${crop.confidence}%</strong>
+                            ${crop.prediction_method ? `<span style="color: #666; margin-left: 10px;">(${crop.prediction_method})</span>` : ''}
+                        </div>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" style="width: ${crop.confidence}%"></div>
+                        </div>
+                        <div class="crop-details">
+                            <div class="detail-item">
+                                <strong>${crop.estimated_yield ? crop.estimated_yield.toLocaleString() : 'N/A'}</strong>
+                                <span>Estimated Yield (kg/ha)</span>
+                            </div>
+                            <div class="detail-item">
+                                <strong>₹${crop.estimated_revenue ? crop.estimated_revenue.toLocaleString() : 'N/A'}</strong>
+                                <span>Revenue</span>
+                            </div>
+                            <div class="detail-item">
+                                <strong>₹${crop.estimated_profit ? crop.estimated_profit.toLocaleString() : 'N/A'}</strong>
+                                <span>Profit</span>
+                            </div>
+                            <div class="detail-item">
+                                <strong>${crop.roi_percentage ? crop.roi_percentage.toFixed(1) : 'N/A'}%</strong>
+                                <span>ROI</span>
+                            </div>
+                        </div>
+                    `;
+                    
+                    listDiv.appendChild(cropCard);
+                });
+            } else {
+                listDiv.innerHTML = '<p>No recommendations available.</p>';
+            }
+            
+            resultsDiv.style.display = 'block';
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Show auto-fill information
+        function showAutoFillInfo(autoFilled, locationData) {
+            const infoDiv = document.getElementById('autoFillInfo');
+            if (autoFilled && (autoFilled.soil || autoFilled.weather)) {
+                let message = '✅ Auto-filled data: ';
+                const items = [];
+                if (autoFilled.soil) items.push('Soil properties');
+                if (autoFilled.weather) items.push('Weather data');
+                message += items.join(' and ');
+                
+                if (locationData && locationData.lat) {
+                    message += ` based on coordinates (${locationData.lat.toFixed(4)}, ${locationData.lon.toFixed(4)})`;
+                }
+                
+                infoDiv.innerHTML = message;
+                infoDiv.style.display = 'block';
+            } else {
+                infoDiv.style.display = 'none';
+            }
+        }
+
+        // Utility functions
+        function showLoading(show) {
+            document.getElementById('loading').style.display = show ? 'block' : 'none';
+        }
+
+        function showMessage(message, type) {
+            const errorDiv = document.getElementById('error');
+            errorDiv.innerHTML = message;
+            errorDiv.className = type;
+            errorDiv.style.display = 'block';
+            
+            if (type === 'success') {
+                setTimeout(() => {
+                    errorDiv.style.display = 'none';
+                }, 3000);
+            }
+        }
+
+        function hideError() {
+            document.getElementById('error').style.display = 'none';
+        }
+
+        // Sample coordinates for testing
+        function loadSampleData() {
+            // Delhi coordinates
+            document.getElementById('latitude').value = '28.6139';
+            document.getElementById('longitude').value = '77.2090';
+        }
+
+        // Load sample data on page load
+        window.addEventListener('load', function() {
+            // You can uncomment this to load sample coordinates
+            // loadSampleData();
+        });
+    </script>
+</body>
+</html>
